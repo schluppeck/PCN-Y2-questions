@@ -6,7 +6,7 @@ date-format: iso
 format: 
   html: default
 output-file: "index"
-output-ext: .html
+output-ext: html
 self-contained: true
 embed-resources: true
 toc: true
