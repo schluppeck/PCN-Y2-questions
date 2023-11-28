@@ -1,0 +1,159 @@
+---
+title: "Q+A for Y2 PCN lab"
+author: Denis Schluppeck
+date-modified: 2023-11-28
+date-format: iso
+format: 
+  html: default
+self-contained: true
+embed-resources: true
+toc: true
+---
+
+```{r}
+#| warning:  false
+#| echo: false
+#| message: false
+library(tidyverse)
+library(gt)
+theme_set(theme_minimal(base_size = 16))
+
+```
+
+
+## $t$-statistics
+
+### Difference between beta weights...
+
+>When calculating the difference between the beta weights to work out the critical t-value, do we always take away the face beta weight from the object? 
+
+For the timeseries from the face-selective voxel, the beta weight for the "faces" explanatory variable (EV), call it $F$, will be higher than for the object EV (call that one 'O'). That means the difference between them will be positive ($F-O > 0$). 
+
+But for the object selective voxel that difference will be negative. The distribution of $t$ values is symmetric, i.e. has the same shape for positive and negative going values -- this makes calculating $p$ values (*area remaining under the curve* at a particular $t$ value confusing for some... but as long as you can remember the sign of the effect (was it $F>O$ or $O>F$?), then you can just use the $t$ value without a sign to find the $p$ values for reporting.
+
+```{r}
+#| label: fig-line-plot
+#| fig-cap: "t-distribution plot. The highlighted area corresponds to the p-value for the t value calculated from the beta weights..."
+#| code-fold: true
+
+score <- 2.1
+p9 <- ggplot(data.frame(x = c(-4, 4)), aes(x = x)) +
+  stat_function(fun = dt, args = list(df = 158)) +
+  stat_function(fun = dt, args = list(df = 158), 
+                xlim = c(score, 4),
+                  geom = "area", fill = "#84CA72", alpha = .5) +  
+  geom_vline(xintercept =  0, color="blue") +
+  geom_vline(xintercept =  score, color="#84CA72") +
+  
+  labs(title = "t-distribution (df = 158)",
+       subtitle = paste('for e.g. a t-statistic of t=',score),
+       x = "t", y = "density")
+p9
+```
+
+
+### $t$ for faces, objects, and also their comparison?
+
+>Also do we only use the t-value for the specific data set to find the p-value (meaning face t-value due to face data set), and if the answer is yes, what do we do for the non-selective V1 region?
+
+I suggest you report the stats for $F$, $O$, but also comparing them (so $F-O$ or vice versa). This will allow you to say something about the significance of the "selective" response. For V1 (early visual cortex), that comparision may well be not significant...
+
+## What are the units for Beta weights?
+
+Good question. They are *dimensionless* multipliers. But all we need to know is their size and how variable they are (which is captured in the *standard error* for each weight).
+
+
+## $\pm1$ standard error interval includes 0.
+
+>I got an SEM that goes into the negative for a Beta weight. How can this be true? In actually, it may be that there is less than 0 explanation in our voxel model from this stimulus?
+
+Beta weights can take on positive, 0, or negative values. 
+
+Consider, e.g. a regression line with the equation $y = mx$. It ca have a  a downward slope.... the weight $m$ for that is negative. It just means that for every positive going step in our independent variable $x$, we have a *decrease* in the value of $y$.
+
+## Exact, inexact degrees of freedom
+
+>Will we be marked down for using a df of 175? Should we state in the notes what we should have used? Is this a valid critique for the discussion?
+
+I assume this value for *degrees of freedom* is the closest that can be found in a table of critical $t$ values in a book or on some online. Using $df=175$ would be slighly more conservative, and in practice it will make only a tiny difference, but you you can just use the values I provide here below.
+
+Here is a table that I have computed with `R`:
+
+```{r}
+#| code-fold: true
+#| #| label: fig-critical-t
+#| tbl-colwidths: [25,25]
+#| tbl-cap: "Critical t-values for a given p (two-tailed)"
+
+data <-  as_tibble(c(0.05, 0.01)) %>% 
+          rename(p_value = value) %>% 
+        mutate(critical_t = qt(1 - p_value/2, df = 158)) 
+data %>%   gt() %>% 
+    tab_header(
+    title = md("Critical *t* values a given *p*"),
+    subtitle = md("df=158, two-tailed")
+  ) %>% 
+    fmt_number(
+    columns = 1:2,
+    decimals = 3,
+    use_seps = FALSE
+  )
+```
+
+## Results in both graphs and text?
+
+>If we demonstrate results through a table or graph, do we need to report this in-text as well?
+
+Yes. You should provide context for your figures, tables, and results in the written part of the report. That doesn't mean you have to replicate exactly the same information (after all, graphs and tables can usually be much more information-dense). Have a look at papers / publications to see how authors generally strike this balance.
+
+## What were the stimuli?
+
+>I know we saw the experiment, but please could you release the stimuli used?
+
+When we collected the data from this participant, we ran some computer code (a program we called `FFAlocaliser()`. You can have a look at some of the details [on this webpage](https://schluppeck.github.io/dafni/gettingData.html#stimulus-code-201718)
+
+- I made a [youtube clip explaining what's going on ](https://www.youtube.com/watch?v=wcA_h-rrVeM)
+
+- and you can find some of the actual images that were being used [in this github repository](https://github.com/schluppeck/dafni/tree/master/stimulusCode/stims)
+
+## Trouble creating graph for stimulus timing.
+
+>I'm having trouble creating a graph for the stimulus timings for the experiment. Please could you explain this?
+
+There were 
+1. 10 images of faces (which took a total of **12s** to display), followed by
+2. **12s** of rest (whitish / gray background) 
+3. then 10 images of objects, (which took a total of **12s** to display), followed by
+4. **12s** of rest (whitish / gray background) 
+
+... then repeat this loop (with different exemplars) for a total of 240s.
+
+For an answer of how to display stimulus timings in a figure, you could draw some inspiration from one of the illustrations online - search for e.g. "stimulus timing figures" for a relatively good crop.
+
+
+## The guidance says "houses" not "objects"...
+
+>The guidance says that the object stimuli were houses but in lab class you showed use objects like a ladder and said that was the stimuli presented.
+
+The objects included some houses, iirc, but this version of the experiment looks at broader categories of objects, not just houses. This snippet of text may have survived from earlier, where the experiment was specifically trying to locate the *parahippocampal place area (PPA)*, whereas here, we are looking at responses to objects more broadly defined.
+
+## Significant difference from 0? And should we report $r^2$? 
+
+>For testing to see whether each voxel is significantly different to 0, is this a one-sample t-test? 
+
+Yes. You get the $t$ value from the weight (face or object selective) and its standard error by
+
+$$
+t=\frac{\text{weight}}{\text{standard error}}
+$$
+and then checking the $p$ value for $df=158$ degrees of freedom.An alternative is figuring out whether the $t$ you have calculated exceeds a critical $t$ value for $df=158$ at a $p$ value of, say, 0.05 or 0.01.
+
+>Is this test also seeing whether the predictor is significant using linear regression? Are these the same thing? 
+
+Yes, that's what I meant by "being significant". There is a separate question about whether one predictor (eg. EV for faces) is *different* from another. For that you need to compare the difference between the two weights (and use the pooled standard error to calculate that $t$).
+
+>Should we report this as a regression with R2 ... ?
+
+The assessment of whether linear regression does a good job of explaining the data is a separate question (but you get that information from the `LINEST()` function results from Excel). In that context, $r^2$, the coefficient of determination, tells you the following. How well does linear regression with the two explanatory variables we have included in our model explain the data. And here $r^2$ can tell you the proportion of variance in the data explained by the model.... more simply: how much of the data is captured by the model? E.g. $r^2=0.45$ means that 45% of the variance in the data is explained. 
+
+
