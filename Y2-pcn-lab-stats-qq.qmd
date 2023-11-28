@@ -5,6 +5,8 @@ date-modified: 2023-11-28
 date-format: iso
 format: 
   html: default
+output-file: "index"
+output-ext: .html
 self-contained: true
 embed-resources: true
 toc: true
@@ -155,5 +157,29 @@ Yes, that's what I meant by "being significant". There is a separate question ab
 >Should we report this as a regression with R2 ... ?
 
 The assessment of whether linear regression does a good job of explaining the data is a separate question (but you get that information from the `LINEST()` function results from Excel). In that context, $r^2$, the coefficient of determination, tells you the following. How well does linear regression with the two explanatory variables we have included in our model explain the data. And here $r^2$ can tell you the proportion of variance in the data explained by the model.... more simply: how much of the data is captured by the model? E.g. $r^2=0.45$ means that 45% of the variance in the data is explained. 
+
+## Do we need to do an $F$ test?
+
+No. There are some statistics reported by Excel's `LINEST()` function that allow you to do an $F$ test on overall goodness of fit for the model. But we didn't cover this in class, and I don't expect any of this in the lab report.
+
+## How to report stats (APA format)??
+
+>[It's hard] to write up my results section so it fits the APA format and isn't confusing. 
+>Are there any resources to report each stat correctly?
+
+I am not going to mark papers based on the details of the APA style, although some of the principles expressed in that style guide are good.
+
+Have a look at this [PDF instructional version relating to numbers/stats](https://apastyle.apa.org/instructional-aids/numbers-statistics-guide.pdf) for inspiration and details.
+
+Key ideas are:
+
+- (for me) treat the APA style guide as a **guide / set of suggestions** for what to do and think about the **principles behind** the suggestions. You won't get marked down on tiny details
+
+- can the reader reconstruct/understand what you did?
+
+- is the presentation unambiguous?
+
+- there is more than one way to be correct / write a good results section.
+
 
 
