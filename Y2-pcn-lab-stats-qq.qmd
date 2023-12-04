@@ -10,6 +10,7 @@ output-ext: html
 self-contained: true
 embed-resources: true
 toc: true
+number-sections: true
 ---
 
 ```{r}
@@ -181,5 +182,55 @@ Key ideas are:
 
 - there is more than one way to be correct / write a good results section.
 
+## Searching  `Echo360` transcripts
+
+You can look for text in the transcribed video recordings - not just one-by-one, but for all recordings in one go. Very nifty. [Video explainer here](https://www.youtube.com/watch?v=mAn1a920Y6o).
+
+[![Youtube video explaining Echo360 search](./youtube.png){width=250 fig-align="left"}](https://www.youtube.com/watch?v=mAn1a920Y6o)
+
+
+## Data: coverage of the brain?
+
+>It looks like not the whole brain was scanned, so how to we explain how much of the brain was scanned?
+
+You can state that the coverage was optimised to include the relevant regions in the *occipital* and *ventral temporal cortex*. 
+
+To give you an idea about what the actual coverage was, here an image (gray, anatomical scan with skull removed; reddish colours, coverage of the fMRI data). Feel free to download that image and use it in your lab repport.
+
+![Overlay of fMRI coverage on anatomical scan](./coverage.png)
+## Regions-of-interest (ROIs)
+
+>What are we actually expected to write in the ROI section.
+
+You can use that space to describe approximate anatomical locations, a key reference (example papers that cite, explain them), and any other details you find interesting if you find anything (eg. is it thought to be one very specific region or location, variability across participants, etc.). You can include this for
+
+- a face selective region (FFA)
+- on object-selective region (several options, nomenclatures)
+- an early visual region (eg primary visual cortex, V1)
+
+
+## The provided statistical maps... what do the colours mean?
+
+>What do the statistical maps you've given us highlight? Is one colour response to faces and the other response to objects? Or perhaps faces-objects and objects-faces. An explanation of this colour scale would be much appreciated. 
+
+I provided three images that show the extent of the maps for different statistical comparisons I made when I ran that dataset through FSL/FEAT. The colours I chose are arbitrary - I just didn't want to use colour maps that clash... to avoid potential confusion. For two of the maps you can see that using different colour maps allows you to show multiple statistical maps together, which can help with keeping the number of figures down.
+
+You don't need to know or include the details in your report, but for completeness and for those who are interested in the nitty-gritty: 
+
+0. (I used the standard settings in FSL/FEAT to control for family-wise error rate (Z-threshold: 3.1, cluster p threshold: 0.05) 
+1. one map shows which voxels are responded "significantly more" during the face presentations, than the objects. 
+2. another maps shows the voxels that responded with the opposite pattern: more to object presentations than faces
+3. the third map shows are that responded more to any of the stimulus presentations than rest (as less conservative test, so therefore much more "activated" area)
+
+::: {#fig-maps layout-ncol=1}
+
+![Voxel 1](snap1.png){#fig-one}
+
+![Voxel 2](snap2.png){#fig-two}
+
+![Voxel 3](snap3.png){#fig-three}
+
+Locations of the three voxels in dataset.
+:::
 
 
